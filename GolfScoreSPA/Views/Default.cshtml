@@ -1,7 +1,10 @@
 ﻿@{
     Layout = null;
-    int NumberOfSlides = 7;
-    string noMoreSlidesMarker = "end-of-slideshow";
+    int NumberOfHoles = 18;
+    int NumberOfPlayers = 4;
+    string BackgroundColor = "#145828";
+    string HighlightColor = "#FF9";
+    int ColWidthPercent = 100 / (NumberOfPlayers + 1);
 }
 
 <!DOCTYPE html>
@@ -9,90 +12,162 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Sliding Cards Demo</title>
+    <title>Golf Score</title>
 
     <style>
-        body, div {
-            background-color: #ececec;
-            margin: 0;
-            padding: 0;
-            border: 0;
-            position: relative;
+
+        * {
+            border:0;
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
         }
 
-        .slide-header {
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: @BackgroundColor;
+            color: #FFF;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            border-bottom: 1px solid #ffd800;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        td {
+            width: @(ColWidthPercent)%;
+            text-align: center;
+        }
+
+        .attention {
+            background-color: #FFF;
+            color: #000;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        input.score-for-hole {
+            background-color: @BackgroundColor;
+            border: 1px solid @HighlightColor;
+            color: #FFF;
             width: 100%;
-            height: auto;
-            position: absolute;
-            top: 0;
+            text-align: center;
+            height: 40px;
+            margin-bottom: 10px;
         }
 
-        .slide-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        input.score-for-hole:focus {
+            background-color: @HighlightColor;
+            border-color: @BackgroundColor;
+            color: #000;
         }
 
-        .slide {
-            width: 100%;
-            height: 700px;
-            background-size: 100% auto;
-            background-position: top center;
-            background-repeat: no-repeat;
-            transition: all 0.5s ease-in;
-            -webkit-transition: all 0.5s ease-in;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
-        }
-        .slide.waiting {
-            transform: translate3d(100%,0,0);
-            -webkit-transform: translate3d(100%,0,0);
+        .calculated-total-score {
+            font-weight: bold;
+            border-top: 1px solid @HighlightColor;
         }
     </style>
+
 </head>
 <body>
-    <div class="slide-container">
-        <img class="slide-header" src="~/Content/slideimgs/slideheader.png" />
-        @for (var slideNum = 0; slideNum < NumberOfSlides; slideNum++)
-        {
-            string nextSlideId = (slideNum + 1 < NumberOfSlides) ? String.Format("slide-{0}", slideNum + 1) : noMoreSlidesMarker;
 
-            <div id="slide-@slideNum" class="slide @(slideNum>0 ? "waiting" : String.Empty)"
-                 style="background-image: url(http://slides.mikeworkpc.com/Content/slideimgs/slideimg-@(slideNum).png)"
-                 data-next-slide-id="@nextSlideId">
-            </div>
-        }
+    <h1>Golf Score Card</h1>
+    <table class="score-holder">
+
+        <thead>
+            <tr>
+                <th>Hole</th>
+                @for (int playerNum = 1; playerNum <= NumberOfPlayers; playerNum++)
+                {
+                    <th>P@(playerNum)</th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (int holeNum = 1; holeNum <= NumberOfHoles; holeNum++)
+            {
+                <tr>
+                    <td>
+                        #@holeNum
+                    </td>
+                    @for (int playerNum = 1; playerNum <= NumberOfPlayers; playerNum++)
+                    {
+                        <td>
+                            <input class="score-for-hole player@(playerNum)" type="tel" />
+                        </td>
+                    }
+                </tr>
+            }
+
+            <tr>
+                <td>&Sigma;</td>
+                @for (int playerNum = 1; playerNum <= NumberOfPlayers; playerNum++)
+                {
+                    <td class="calculated-total-score" data-player="player@(playerNum)">54</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+    <div class="attention new-game-button">
+        Reset the game? <strong>NEW GAME</strong>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready((function () {
 
-            "use strict";
+            function updateScoreForPlayer(index, elForPlayerTotal) {
+                var $elForPlayerTotal = $(elForPlayerTotal),
+                    player = $elForPlayerTotal.data("player"),
+                    selectorForPlayer = "input." + player,
+                    totalForPlayer = 0;
 
-            $(".slide-container").on("click", ".slide", function () {
+                $(selectorForPlayer).each(function (index, element) {
+                    var containedVal = parseInt($(element).val());
+                    if (typeof containedVal === "number" && !isNaN(containedVal)) {
+                        totalForPlayer += containedVal;
+                    }
+                });
 
-                var clickedSlide = this,
-                    nextSlideId = $(clickedSlide).data("next-slide-id"),
-                    $nextSlide;
+                $elForPlayerTotal.html(totalForPlayer);
+            };
 
-                if (nextSlideId === "@noMoreSlidesMarker") {
-                    alert("Profile Submission Complete!");
+            function updateAllScores() {
+                $(".calculated-total-score").each(updateScoreForPlayer);
+            };
+
+            function validateChange() {
+                var $changedInputEl = $(this),
+                    proposedValue = $changedInputEl.val(),
+                    parsedValue = parseInt(proposedValue);
+
+                if (typeof parsedValue === "number" && parsedValue > 0 && !isNaN(parsedValue)) {
+                    updateAllScores();
                 }
                 else {
-                    $nextSlide = $("#" + nextSlideId);
-                    $nextSlide.removeClass("waiting");
+                    $changedInputEl.val("");
                 }
+            };
 
-            });
-        })
+            function resetGameBoard() {
+                if (confirm("Really erase all scores and start a new game?")) {
+                    $("input.score-for-hole").val("");
+                    updateAllScores();
+                }
+            };
+
+            return function initAndGo() {
+                $(".score-for-hole").on("blur", validateChange);
+                $(".new-game-button").on("click", resetGameBoard);
+                updateAllScores();
+            };
+
+        }()))
     </script>
+
 </body>
 </html>
