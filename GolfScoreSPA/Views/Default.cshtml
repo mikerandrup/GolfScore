@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+    int NumberOfSlides = 7;
+    string noMoreSlidesMarker = "end-of-slideshow";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Sliding Cards Demo</title>
+
+    <style>
+        body, div {
+            background-color: #ececec;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            position: relative;
+        }
+
+        .slide-header {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+        }
+
+        .slide-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .slide {
+            width: 100%;
+            height: 700px;
+            background-size: 100% auto;
+            background-position: top center;
+            background-repeat: no-repeat;
+            transition: all 0.5s ease-in;
+            -webkit-transition: all 0.5s ease-in;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+        }
+        .slide.waiting {
+            transform: translate3d(100%,0,0);
+            -webkit-transform: translate3d(100%,0,0);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <img class="slide-header" src="~/Content/slideimgs/slideheader.png" />
+        @for (var slideNum = 0; slideNum < NumberOfSlides; slideNum++)
+        {
+            string nextSlideId = (slideNum + 1 < NumberOfSlides) ? String.Format("slide-{0}", slideNum + 1) : noMoreSlidesMarker;
+
+            <div id="slide-@slideNum" class="slide @(slideNum>0 ? "waiting" : String.Empty)"
+                 style="background-image: url(http://slides.mikeworkpc.com/Content/slideimgs/slideimg-@(slideNum).png)"
+                 data-next-slide-id="@nextSlideId">
+            </div>
+        }
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            "use strict";
+
+            $(".slide-container").on("click", ".slide", function () {
+
+                var clickedSlide = this,
+                    nextSlideId = $(clickedSlide).data("next-slide-id"),
+                    $nextSlide;
+
+                if (nextSlideId === "@noMoreSlidesMarker") {
+                    alert("Profile Submission Complete!");
+                }
+                else {
+                    $nextSlide = $("#" + nextSlideId);
+                    $nextSlide.removeClass("waiting");
+                }
+
+            });
+        })
+    </script>
+</body>
+</html>
