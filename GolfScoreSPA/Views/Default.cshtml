@@ -75,6 +75,9 @@
 <body>
 
     <h1>Cornhole Score Card</h1>
+    <div class="attention next-inning-button">
+        Next Inning
+    </div>
     <table class="score-holder">
 
         <thead>
@@ -88,7 +91,7 @@
         <tbody>
             @for (int holeNum = 1; holeNum <= NumberOfHoles; holeNum++)
             {
-                <tr>
+                <tr class="inning-row inning-row-@holeNum">
                     <td>
                         #@holeNum
                     </td>
@@ -117,6 +120,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script>
         $(document).ready((function () {
+
+            var currentInning = 0;
 
             function updateScoreForPlayer(index, elForPlayerTotal) {
                 var $elForPlayerTotal = $(elForPlayerTotal),
@@ -158,9 +163,16 @@
                 }
             };
 
+            function nextInning() {
+              currentInning++;
+              $(".inning-row").hide();
+              $(".inning-row-"+currentInning).show();
+            }
+
             return function initAndGo() {
                 $(".score-for-hole").on("blur", validateChange);
                 $(".new-game-button").on("click", resetGameBoard);
+                $(".next-inning-button").on("click", nextInning)
                 updateAllScores();
             };
 
