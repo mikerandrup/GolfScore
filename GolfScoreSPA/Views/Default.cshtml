@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    int NumberOfHoles = 40;
+    int NumberOfHoles = 100;
     int NumberOfPlayers = 2;
     string BackgroundColor = "#41748d";
     string HighlightColor = "#ff9";
@@ -172,7 +172,8 @@
             return function initAndGo() {
                 $(".score-for-hole").on("blur", validateChange);
                 $(".new-game-button").on("click", resetGameBoard);
-                $(".next-inning-button").on("click", nextInning)
+                $(".next-inning-button").on("click", nextInning);
+                nextInning();
                 updateAllScores();
             };
 
