@@ -2,8 +2,8 @@
     Layout = null;
     int NumberOfHoles = 40;
     int NumberOfPlayers = 2;
-    string BackgroundColor = "#41748d";
-    string HighlightColor = "#ff9";
+    string BackgroundColor = "#2A424E";
+    string HighlightColor = "#76ABB7";
     int ColWidthPercent = 100 / (NumberOfPlayers + 1);
 }
 
@@ -32,7 +32,7 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            border-bottom: 1px solid #ffd800;
+            border-bottom: 1px solid @HighlightColor;
             padding: 5px;
             margin: 5px;
         }
@@ -63,6 +63,7 @@
             background-color: @HighlightColor;
             border-color: @BackgroundColor;
             color: #000;
+            outline: none;
         }
 
         .calculated-total-score {
