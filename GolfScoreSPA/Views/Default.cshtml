@@ -2,8 +2,8 @@
     Layout = null;
     int NumberOfHoles = 40;
     int NumberOfPlayers = 2;
-    string BackgroundColor = "#145828";
-    string HighlightColor = "#FF9";
+    string BackgroundColor = "#41748d";
+    string HighlightColor = "#ff9";
     int ColWidthPercent = 100 / (NumberOfPlayers + 1);
 }
 
@@ -80,10 +80,8 @@
         <thead>
             <tr>
                 <th>Inning</th>
-                @for (int playerNum = 1; playerNum <= NumberOfPlayers; playerNum++)
-                {
-                    <th>P@(playerNum)</th>
-                }
+                <th>Blue</th>
+                <th>Silver</th>
             </tr>
         </thead>
 
