@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null;
-    int NumberOfHoles = 18;
-    int NumberOfPlayers = 4;
+    int NumberOfHoles = 40;
+    int NumberOfPlayers = 2;
     string BackgroundColor = "#145828";
     string HighlightColor = "#FF9";
     int ColWidthPercent = 100 / (NumberOfPlayers + 1);
@@ -12,7 +12,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Golf Score</title>
+    <title>Corn Score</title>
 
     <style>
 
@@ -74,12 +74,12 @@
 </head>
 <body>
 
-    <h1>Golf Score Card</h1>
+    <h1>Cornhole Score Card</h1>
     <table class="score-holder">
 
         <thead>
             <tr>
-                <th>Hole</th>
+                <th>Inning</th>
                 @for (int playerNum = 1; playerNum <= NumberOfPlayers; playerNum++)
                 {
                     <th>P@(playerNum)</th>
