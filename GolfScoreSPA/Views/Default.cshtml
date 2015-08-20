@@ -251,7 +251,7 @@
 
             function nextInning() {
               currentInning++;
-              $(".inning-row-"+currentInning).prependTo('.score-holder table').show();
+              $(".inning-row-"+currentInning).prependTo('.score-holder table tbody').show();
               $(".inning-row-"+currentInning).find('input').first().focus();
             }
 
