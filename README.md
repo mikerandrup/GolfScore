@@ -1,5 +1,5 @@
-# GolfScore
-Simple SPA for tracking golf scores
+# CornScore
+Simple SPA for tracking corn toss scores
 
 Try it out during your next game:
-http://subpar.azurewebsites.net
+http://cornscore.azurewebsites.net
