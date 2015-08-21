@@ -234,7 +234,7 @@
                     proposedValue = $changedInputEl.val(),
                     parsedValue = parseInt(proposedValue);
 
-                if (typeof parsedValue === "number" && parsedValue > 0 && !isNaN(parsedValue)) {
+                if (typeof parsedValue === "number" && !isNaN(parsedValue)) {
                     updateAllScores();
                 }
                 else {
